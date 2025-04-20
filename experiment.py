@@ -125,7 +125,7 @@ class Experiment(object):
         train_dicts_per_epoch.update(cls_loss)
         train_dicts_per_epoch.update(train_acc)
 
-        self.train_df = self.train_df.append(train_dicts_per_epoch, ignore_index=True)
+        self.train_df = self.train_df._append(train_dicts_per_epoch, ignore_index=True)
         self.train_df = self.train_df[list(train_dicts_per_epoch.keys())]  # 让epoch_df中的顺序和row_dict中的一致
 
     def test_batch(self, input, target):
@@ -177,7 +177,7 @@ class Experiment(object):
             if epoch_acc > self.best_test:
                 self.best_test = epoch_acc
                 logging.info("New best test acc %5f", epoch_acc)
-        self.val_df = self.val_df.append(result_dicts_per_monitor, ignore_index=True)
+        self.val_df = self.val_df._append(result_dicts_per_monitor, ignore_index=True)
         self.val_df = self.val_df[list(result_dicts_per_monitor.keys())]  # 让epoch_df中的顺序和row_dict中的一致
 
     def train_step_one(self):
@@ -201,7 +201,7 @@ class Experiment(object):
         i_epoch = len(self.epoch_df) - 1
         logging.info("Epoch {:d}".format(i_epoch))
         last_row = self.epoch_df.iloc[-1]
-        for key, val in last_row.iteritems():
+        for key, val in last_row.items():
              logging.info("%s       %.5f", key, val)
         logging.info("")
 
@@ -218,13 +218,12 @@ class Experiment(object):
             logging.info('Best test acc %.5f ', self.measure.max_acc())
             logging.info('mean acc of last 10 epochs %.5f ', self.measure.last10_acc())
             logging.info('std of last 10 epochs %.5f ', self.measure.last10_std())
-            logging.info('offset: max SUB mean acc %.5f ', self.measure.max_mean_offset())
+            # logging.info('offset: max SUB mean acc %.5f ', self.measure.max_mean_offset())
         logging.info('* '*20)
-        logging.info('Index score(0.4*max+0.4*mean-0.2*offset): %.5f', self.measure.index_equation())
+        # logging.info('Index score(0.4*max+0.4*mean-0.2*offset): %.5f', self.measure.index_equation())
         self.save_acc_loss_fig()
 
     def save_acc_loss_fig(self):
-
         test_acc = self.epoch_df['test_acc'].values.tolist()
         plt.figure()
         plt.plot(range(len(test_acc)), test_acc, label='test acc', linewidth=0.7)

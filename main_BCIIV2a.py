@@ -20,7 +20,7 @@ from torchsummary import summary
 
 def bci4_2a():  # 通用模型模块, 不需要更改, 放在main中方便调试;
     dataset = 'BCI4_2A'
-    data_path = "/home/dog/Documents/EEGDataSet/BCICIV_2a_gdf/"
+    data_path = "/home/xvyv99/My_Data/Project/eeg-dl/Dataset/BCICIV_2a_gdf"
 
     train_filename = "{}T.gdf".format(subject_id)
     test_filename = "{}E.gdf".format(subject_id)
@@ -100,7 +100,7 @@ def bci4_2a():  # 通用模型模块, 不需要更改, 放在main中方便调试
     Net.apply(weights_init)
     Net.apply(weights_init)
 
-    logging.info(summary(Net, show_input=False))
+    #logging.info(summary(Net, (1, 28, 28)))
 
     model_optimizer = torch.optim.AdamW(Net.parameters(), lr=lr_model)
     model_constraint = MaxNormDefaultConstraint()
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
     # subject of the datase
     subject_id = 'A06'
-    device = torch.device('cuda:2')
+    device = torch.device('cuda:0')
 
     print('subject_id: ', subject_id)
 
